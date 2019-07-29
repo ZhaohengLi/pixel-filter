@@ -1,3 +1,3 @@
 # pixel-filter
 
-# Using Semantic Segmentation to achieve better result.
+Using Semantic Segmentation to achieve better result.
