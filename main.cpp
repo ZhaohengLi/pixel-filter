@@ -30,7 +30,7 @@ int main() {
 }
 
 void cutVid(){
-    VideoCapture vid("/Users/lizhaoheng/Downloads/Exp1_006_baseline.mp4");
+    VideoCapture vid("/Users/lizhaoheng/Dropbox/Work/SRT2/VideoBlur/1/Exp3_012_baseline_25fps.mp4");
     if(!vid.isOpened()){ printf("Open video failed!\n");return; }
 
     int vidWidth=(int)vid.get(CAP_PROP_FRAME_WIDTH);
@@ -51,27 +51,28 @@ void cutVid(){
 }
 
 void splitVid(){
-    VideoCapture vid("/Users/lizhaoheng/Dropbox/Work/SRT2/Context&Episodic_Memory/Video_Clips_Materials/Mandy_PNAS_Dataset/Exp1_baseline/Exp1_006_baseline.mp4");
+    VideoCapture vid("/Users/lizhaoheng/Dropbox/Work/SRT2/VideoBlur/1/Exp3_012_baseline_25fps.mp4");
     if(!vid.isOpened()){ printf("Open video failed!\n");return; }
-    vid.set(CAP_PROP_POS_FRAMES,200);
+    vid.set(CAP_PROP_POS_FRAMES,0);
     Mat frame;
-    for(int i = 0; i < 300; i++){
+    for(int i = 0; i <25*60; i++){
         vid>>frame;
-        String fileName = "./Splitfiles/"+to_string(i)+".jpg";
+        String fileName = "/Users/lizhaoheng/Dropbox/Work/SRT2/VideoBlur/1/"+to_string(i)+"_original.jpg";
         imwrite(fileName, frame);
     }
     return;
 }
 
 void blurAccordingToFile(){
-    for(int i=500; i<501; i++) {
-        String imageFileName =
-                "/Users/lizhaoheng/Dropbox/Work/CLionProjects/CVProjectV1.0/cmake-build-debug/SplitFiles/" +
-                to_string(i) + "_resize.jpg";
-        String markFileName =
-                "/Users/lizhaoheng/Dropbox/Work/CLionProjects/CVProjectV1.0/cmake-build-debug/SplitFiles/" +
-                to_string(i) + "_mark.txt";
+    VideoWriter wri("/Users/lizhaoheng/Dropbox/Work/SRT2/VideoBlur/1/Exp3_012_baseline_25fps_blur.avi", 828601953, 25.0, Size(513, 289));
+    if(!wri.isOpened()){ printf("VideoWriter failed to open!\n");return; }
+
+    for(int i=0; i<1500; i++) {
+        String imageFileName = "/Users/lizhaoheng/Dropbox/Work/SRT2/VideoBlur/1/" + to_string(i) + "_resize.jpg";
+        String markFileName = "/Users/lizhaoheng/Dropbox/Work/SRT2/VideoBlur/1/" + to_string(i) + "_mark.txt";
+
         Mat image = imread(imageFileName);
+
         ifstream markFile;
         markFile.open(markFileName);
         while (!markFile.eof()) {
@@ -81,7 +82,9 @@ void blurAccordingToFile(){
             markFile >> col_e;
             picRectBlur(image, Range(row, row+1), Range(col_s, col_e+1));
         }
-        imwrite("/Users/lizhaoheng/Dropbox/Work/CLionProjects/CVProjectV1.0/cmake-build-debug/SplitFiles/" +
-                to_string(i) + "_blur.jpg", image);
+
+        imwrite("/Users/lizhaoheng/Dropbox/Work/CLionProjects/CVProjectV1.0/cmake-build-debug/SplitFiles/" + to_string(i) + "_blur.jpg", image);
+        wri<<image;
     }
+    return;
 }
