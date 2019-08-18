@@ -3,7 +3,7 @@
 void picRectBlur(Mat &img,Range rows,Range cols){
     //TODO 检查传入参数合法性
     Mat target = img(rows,cols);
-    GaussianBlur(target,target,Size(299,299),0,0);
+    GaussianBlur(target,target,Size(101,101),0,0);
     return;
 }
 
